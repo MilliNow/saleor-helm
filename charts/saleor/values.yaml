@@ -4,11 +4,11 @@ global:
     postgresqlUsername: postgres
     postgresqlPassword: saleor
 
-defaultFromEmail: noreply@example.com
-storefrontUrl: http://localhost:3000
-dashboardUrl: http://localhost:9000
+defaultFromEmail: info@millinow.com
+storefrontUrl: www.trymilli.com
+dashboardUrl: manage.trymilli.com
 
-# kubectl create secret generic saleor-secret --from-literal=secret=$SECRET_HERE
+# make secret
 # TODO: Make the name dynamic
 secretKey:
   name: saleor-platform-staging-secret
@@ -49,17 +49,21 @@ securityContext: {}
   # runAsUser: 1000
 
 service:
-  type: ClusterIP
+  type: LoadBalancer
   port: 80
+  loadBalancerIP: 35.193.170.59
 
+# TODO: Configure TLS
+# TODO: Make host dynamic
 ingress:
-  enabled: false
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
   hosts:
-    - host: chart-example.local
-      paths: []
+    - host: app.trymilli.com
+      paths:
+        - /
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
@@ -77,6 +81,7 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
+# TODO: Enable autoscaling
 autoscaling:
   enabled: false
   minReplicas: 1

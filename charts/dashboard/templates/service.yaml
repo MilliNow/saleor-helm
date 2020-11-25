@@ -13,3 +13,4 @@ spec:
       name: http
   selector:
     {{- include "dashboard.selectorLabels" . | nindent 4 }}
+  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
