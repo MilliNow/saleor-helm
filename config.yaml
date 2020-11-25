@@ -1,5 +1,5 @@
-owner: k
+owner: Millinow
 git-repo: saleor-helm
 package-path: .deploy
-charts-repo: https://k.github.io/saleor-helm
+charts-repo: https://millinow.com/saleor-helm
 index-path: ./index.yaml

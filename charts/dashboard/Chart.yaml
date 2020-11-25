@@ -1,6 +1,6 @@
 apiVersion: v2
 name: dashboard
-description: Dashboard for Saleo
+description: Dashboard for Saleor
 type: application
-version: 0.1.0
+version: 0.1.1
 appVersion: 2.10.0

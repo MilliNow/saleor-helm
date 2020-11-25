@@ -9,8 +9,9 @@ storefrontUrl: http://localhost:3000
 dashboardUrl: http://localhost:9000
 
 # kubectl create secret generic saleor-secret --from-literal=secret=$SECRET_HERE
+# TODO: Make the name dynamic
 secretKey:
-  name: saleor-secret
+  name: saleor-platform-staging-secret
   key: secret
 
 replicaCount: 1
