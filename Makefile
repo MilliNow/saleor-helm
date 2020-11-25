@@ -72,7 +72,11 @@ clean:
 	@rm -rf ~/.cache/helm/
 
 helm.install:
-	@helm install $(NAMESPACE) saleor/saleor --namespace $(NAMESPACE) --debug
+	@helm install \
+		$(NAMESPACE) saleor/saleor \
+		--namespace $(NAMESPACE) \
+		--set secretKey.name=$(SECRET_NAME) \
+		--debug
 
 helm.setup:
 	@helm repo add saleor https://millinow.com/saleor-helm
@@ -95,7 +99,10 @@ deploy: helm.setup helm.update helm.install
 	echo "Helm deployed successfully!"
 
 upgrade: helm.update
-	@helm upgrade $(NAMESPACE) saleor/saleor --namespace $(NAMESPACE)
+	@helm upgrade \
+		$(NAMESPACE) saleor/saleor \
+		--set secretKey.name=$(SECRET_NAME) \
+		--namespace $(NAMESPACE)
 
 uninstall:
 	@helm uninstall $(NAMESPACE) --namespace $(NAMESPACE)

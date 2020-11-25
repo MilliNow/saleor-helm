@@ -8,10 +8,8 @@ defaultFromEmail: info@millinow.com
 storefrontUrl: www.trymilli.com
 dashboardUrl: manage.trymilli.com
 
-# make secret
-# TODO: Make the name dynamic
 secretKey:
-  name: saleor-platform-staging-secret
+  name: secret-key-name
   key: secret
 
 replicaCount: 1
