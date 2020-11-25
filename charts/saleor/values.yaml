@@ -81,9 +81,8 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
-# TODO: Enable autoscaling
 autoscaling:
-  enabled: false
+  enabled: true
   minReplicas: 1
   maxReplicas: 100
   targetCPUUtilizationPercentage: 80
