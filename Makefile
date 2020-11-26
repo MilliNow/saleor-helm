@@ -123,7 +123,7 @@ deploy: helm.setup helm.update helm.install
 
 upgrade: helm.update
 	@helm upgrade \
-		$(NAMESPACE) saleor/saleor \
+		saleor saleor/saleor \
 		--set secretKey.name=$(SECRET_NAME) \
 		--namespace $(NAMESPACE)
 
