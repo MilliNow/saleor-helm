@@ -49,10 +49,10 @@ ingress:
     - host: manage.trymilli.com
       paths:
         - /dashboard
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+  tls:
+    - secretName: letsencrypt-staging
+      hosts:
+        - manage.trymilli.com
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious

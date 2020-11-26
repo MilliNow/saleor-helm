@@ -2,14 +2,14 @@ apiVersion: v2
 name: saleor
 description: Saleor Graphql E-commerce Helm Chart
 type: application
-version: 0.1.4
+version: 0.1.5
 appVersion: 2.10.0
 dependencies:
 - name: storefront
-  version: ^0.1.3
+  version: ^0.1.4
   repository: file://../storefront
 - name: dashboard
-  version: ^0.1.2
+  version: ^0.1.3
   repository: file://../dashboard
 - name: postgresql
   version: ^8.10.5

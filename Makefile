@@ -77,9 +77,20 @@ helm.install:
 		--namespace $(NAMESPACE) \
 		--set secretKey.name=$(SECRET_NAME) \
 		--debug
+	@helm install \
+		$(CLUST) ingress-nginx/ingress-nginx \
+		--namespace $(NAMESPACE)
+	@helm install \
+		cert-manager jetstack/cert-manager \
+		--namespace $(NAMESPACE) \
+		--version v1.1.0 \
+		--set installCRDs=true
 
 helm.setup:
 	@helm repo add saleor https://millinow.com/saleor-helm
+	@helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+	@helm repo add jetstack https://charts.jetstack.io
+	@helm repo update
 	@helm repo ls
 
 helm.update:

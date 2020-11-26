@@ -51,7 +51,6 @@ service:
   port: 80
   loadBalancerIP: 35.193.170.59
 
-# TODO: Configure TLS
 # TODO: Make host dynamic
 ingress:
   enabled: true
@@ -62,10 +61,10 @@ ingress:
     - host: app.trymilli.com
       paths:
         - /
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+  tls:
+    - secretName: letsencrypt-staging
+      hosts:
+        - app.trymilli.com
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
