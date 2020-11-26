@@ -1,23 +1,41 @@
-{{- if .Values.ingress.tls }}
-apiVersion: cert-manager.io/v1
-kind: Issuer
-
-metadata:
-  name: {{ .Values.ingress.issuer.name }}
-spec:
- acme:
-   # The ACME server URL
-   server: https://acme-staging-v02.api.letsencrypt.org/directory
-   # Email address used for ACME registration
-   email: {{ .Values.defaultFromEmail }}
-   # Name of a secret used to store the ACME account private key
-   privateKeySecretRef:
-    {{- range .Values.ingress.tls }}
-    name: {{ .secretName }}
-    {{- end }}
-   # Enable the HTTP-01 challenge provider
-   solvers:
-   - http01:
-       ingress:
-         class:  nginx
+{{- if .Values.ingress.enabled -}}
+{{- $fullName := include "saleor.fullname" . -}}
+{{- $svcPort := .Values.service.port -}}
+{{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: networking.k8s.io/v1beta1
+{{- else -}}
+apiVersion: extensions/v1beta1
 {{- end }}
+kind: Ingress
+metadata:
+  name: {{ $fullName }}
+  labels:
+    {{- include "saleor.labels" . | nindent 4 }}
+  {{- with .Values.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.ingress.tls }}
+  tls:
+    {{- range .Values.ingress.tls }}
+    - hosts:
+        {{- range .hosts }}
+        - {{ . | quote }}
+        {{- end }}
+      secretName: {{ .secretName }}
+    {{- end }}
+  {{- end }}
+  rules:
+    {{- range .Values.ingress.hosts }}
+    - host: {{ .host | quote }}
+      http:
+        paths:
+          {{- range .paths }}
+          - path: {{ . }}
+            backend:
+              serviceName: {{ $fullName }}
+              servicePort: {{ $svcPort }}
+          {{- end }}
+    {{- end }}
+  {{- end }}
