@@ -10,6 +10,8 @@ SECRET_NAME ?= $(NAMESPACE)-secret
 namespace:
 	@echo "Creating Kubernetes namespace: $(NAMESPACE)"
 	@kubectl create namespace $(NAMESPACE)
+	@echo "Creating Kubernetes namespace: cert-manager"
+	@kubectl create namespace cert-manager
 
 cluster.config:
 	@echo "Fetching cluster '$(CLUST)' credentials from GCloud..."
@@ -81,14 +83,12 @@ helm.install:
 		--set controller.service.type=NodePort \
 		--set controller.hostNetwork=true \
 		--namespace $(NAMESPACE)
+
 	@helm install \
 		cert-manager jetstack/cert-manager \
-		--namespace $(NAMESPACE) \
+		--namespace cert-manager \
 		--version v1.1.0 \
 		--set installCRDs=true
-
-	@kubectl delete mutatingwebhookconfiguration.admissionregistration.k8s.io cert-manager-webhook
-	@kubectl delete validatingwebhookconfigurations.admissionregistration.k8s.io cert-manager-webhook
 
 	@helm install \
 		saleor saleor/saleor \
@@ -115,7 +115,7 @@ helm.releases:
 
 helm.uninstall:
 	@helm uninstall saleor --namespace $(NAMESPACE)
-	@helm uninstall cert-manager --namespace $(NAMESPACE)
+	@helm uninstall cert-manager --namespace cert-manager
 	@helm uninstall ingress-nginx --namespace $(NAMESPACE)
 
 deploy: helm.setup helm.update helm.install
