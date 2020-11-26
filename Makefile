@@ -59,7 +59,10 @@ cluster.status:
 	@kubectl get ingress --namespace $(NAMESPACE)
 
 	@echo "\nIP ADDRESSES"
-	@	@gcloud compute addresses list --project $(SALEOR_PROJECT)
+	@gcloud compute addresses list --project $(SALEOR_PROJECT)
+
+	@echo "\nCERTIFICATES"
+	@kubectl get certificate --namespace $(NAMESPACE)
 
 clean:
 	@rm -rf ~/Library/Caches/helm
@@ -78,7 +81,11 @@ helm.install:
 		--set secretKey.name=$(SECRET_NAME) \
 		--debug
 	@helm install \
-		$(CLUST) ingress-nginx/ingress-nginx \
+		$(NAMESPACE)-nginx ingress-nginx/ingress-nginx \
+		--set controller.kind=DaemonSet \
+		--set controller.service.type=NodePort \
+		--set controller.admissionWebhooks.enabled=false \
+		--set controller.hostNetwork=true \
 		--namespace $(NAMESPACE)
 	@helm install \
 		cert-manager jetstack/cert-manager \
@@ -156,7 +163,7 @@ chart.index:
 	$(eval MESSAGE?='Index changes')
 	@cr index --config config.yaml
 	@git add index.yaml charts/saleor/Chart.lock
-	@git commit -m "Update index.yaml" -- index.yaml charts/saleor/Chart.lock
+	@git commit -m "Update index.yaml" -- index.yaml
 	@git push
 	@git add .
 	@echo "Commit and push changes"
