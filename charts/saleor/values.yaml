@@ -54,9 +54,10 @@ service:
 # TODO: Make host dynamic
 ingress:
   enabled: true
+  issuer: &issuer app-cert-issuer-staging
   annotations:
     kubernetes.io/ingress.class: nginx
-    cert-manager.io/issuer: "letsencrypt-staging"
+    cert-manager.io/issuer: *issuer
   hosts:
     - host: app.trymilli.com
       paths:
