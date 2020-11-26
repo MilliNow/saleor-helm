@@ -93,6 +93,29 @@ entries:
   saleor:
   - apiVersion: v2
     appVersion: 2.10.0
+    created: "2020-11-26T00:46:40.71554-08:00"
+    dependencies:
+    - name: storefront
+      repository: file://../storefront
+      version: ^0.1.9
+    - name: dashboard
+      repository: file://../dashboard
+      version: ^0.1.8
+    - name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: ^8.10.5
+    - name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: ^10.7.1
+    description: Saleor Graphql E-commerce Helm Chart
+    digest: 89c1c3c84b5d79256edd002c212ede8ab5bf3dc068e8602482af99ca0efde7be
+    name: saleor
+    type: application
+    urls:
+    - https://github.com/MilliNow/saleor-helm/releases/download/saleor-0.1.11/saleor-0.1.11.tgz
+    version: 0.1.11
+  - apiVersion: v2
+    appVersion: 2.10.0
     created: "2020-11-26T00:39:56.266552-08:00"
     dependencies:
     - name: storefront
