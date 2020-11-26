@@ -56,14 +56,13 @@ ingress:
   enabled: true
   annotations:
     kubernetes.io/ingress.class: nginx
-    kubernetes.io/tls-acme: "true"
     cert-manager.io/issuer: "letsencrypt-staging"
   hosts:
     - host: app.trymilli.com
       paths:
         - /
   tls:
-    - secretName: letsencrypt-staging
+    - secretName: letsencrypt-app-staging
       hosts:
         - app.trymilli.com
 
