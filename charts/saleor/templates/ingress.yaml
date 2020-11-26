@@ -3,7 +3,7 @@ apiVersion: cert-manager.io/v1
 kind: Issuer
 
 metadata:
-  name: {{ .Values.ingress.issuer }}
+  name: {{ .Values.ingress.issuer.name }}
 spec:
  acme:
    # The ACME server URL
