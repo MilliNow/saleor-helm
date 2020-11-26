@@ -76,15 +76,9 @@ clean:
 
 helm.install:
 	@helm install \
-		$(NAMESPACE) saleor/saleor \
-		--namespace $(NAMESPACE) \
-		--set secretKey.name=$(SECRET_NAME) \
-		--debug
-	@helm install \
-		$(NAMESPACE)-nginx ingress-nginx/ingress-nginx \
+		ingress-nginx ingress-nginx/ingress-nginx \
 		--set controller.kind=DaemonSet \
 		--set controller.service.type=NodePort \
-		--set controller.admissionWebhooks.enabled=false \
 		--set controller.hostNetwork=true \
 		--namespace $(NAMESPACE)
 	@helm install \
@@ -92,6 +86,15 @@ helm.install:
 		--namespace $(NAMESPACE) \
 		--version v1.1.0 \
 		--set installCRDs=true
+
+	@kubectl delete mutatingwebhookconfiguration.admissionregistration.k8s.io cert-manager-webhook
+	@kubectl delete validatingwebhookconfigurations.admissionregistration.k8s.io cert-manager-webhook
+
+	@helm install \
+		saleor saleor/saleor \
+		--namespace $(NAMESPACE) \
+		--set secretKey.name=$(SECRET_NAME) \
+		--debug
 
 helm.setup:
 	@helm repo add saleor https://millinow.com/saleor-helm
@@ -111,7 +114,9 @@ helm.releases:
 	@helm history $(NAMESPACE) --namespace $(NAMESPACE)
 
 helm.uninstall:
-	@helm uninstall $(NAMESPACE) --namespace $(NAMESPACE)
+	@helm uninstall saleor --namespace $(NAMESPACE)
+	@helm uninstall cert-manager --namespace $(NAMESPACE)
+	@helm uninstall ingress-nginx --namespace $(NAMESPACE)
 
 deploy: helm.setup helm.update helm.install
 	echo "Helm deployed successfully!"
