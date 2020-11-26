@@ -45,6 +45,7 @@ ingress:
   enabled: true
   issuer: &issuer storefront-cert-issuer-staging
   annotations:
+    kubernetes.io/tls-acme: "true"
     kubernetes.io/ingress.class: nginx
     cert-manager.io/issuer: *issuer
   hosts:
