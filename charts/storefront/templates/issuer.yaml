@@ -19,6 +19,5 @@ spec:
    solvers:
    - http01:
        ingress:
-         serviceType: LoadBalancer
          class:  nginx
 {{- end }}
