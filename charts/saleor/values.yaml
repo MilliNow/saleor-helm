@@ -48,7 +48,7 @@ securityContext: {}
 
 service:
   type: LoadBalancer
-  port: 80
+  port: 443
 
 # TODO: Make host dynamic
 ingress:
