@@ -4,7 +4,6 @@ kind: Issuer
 
 metadata:
   name: {{ .Values.ingress.issuer.name }}
-  namespace: cert-manager
 spec:
  acme:
    # The ACME server URL
