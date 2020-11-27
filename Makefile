@@ -3,7 +3,7 @@ CLUST ?= saleor-platform
 CLUST_REG ?= us-central1
 CLUST_ZONE ?= $(CLUST_REG)-a
 SALEOR_PROJECT ?= saleor-platform
-MACHINE_TYPE ?= n1-standard-1
+MACHINE_TYPE ?= n1-standard-2
 NAMESPACE ?= $(CLUST)-staging
 SECRET_NAME ?= $(NAMESPACE)-secret
 
@@ -59,7 +59,10 @@ cluster.status:
 	@kubectl get ingress --namespace $(NAMESPACE)
 
 	@echo "\nIP ADDRESSES"
-	@	@gcloud compute addresses list --project $(SALEOR_PROJECT)
+	@gcloud compute addresses list --project $(SALEOR_PROJECT)
+
+	@echo "\nCertificates"
+	@kubectl get certificate --namespace $(NAMESPACE)
 
 clean:
 	@rm -rf ~/Library/Caches/helm
@@ -72,14 +75,27 @@ clean:
 	@rm -rf ~/.cache/helm/
 
 helm.install:
+	$(eval IP_ADDRESS := $(shell gcloud compute addresses list --project=$(SALEOR_PROJECT) --format="value(address)" --filter="name:nginx-$(NAMESPACE)"))
 	@helm install \
-		$(NAMESPACE) saleor/saleor \
+		nginx ingress-nginx/ingress-nginx \
+		--namespace $(NAMESPACE)
+
+	@helm install \
+		cert-manager jetstack/cert-manager \
 		--namespace $(NAMESPACE) \
+		--set installCRDs=true
+
+	@sleep 60
+	@helm install \
+		--namespace $(NAMESPACE) \
+		saleor saleor/saleor \
 		--set secretKey.name=$(SECRET_NAME) \
 		--debug
 
 helm.setup:
 	@helm repo add saleor https://millinow.com/saleor-helm
+	@helm repo add jetstack https://charts.jetstack.io
+	@helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 	@helm repo ls
 
 helm.update:
@@ -93,34 +109,33 @@ helm.releases:
 	@helm history $(NAMESPACE) --namespace $(NAMESPACE)
 
 helm.uninstall:
-	@helm uninstall $(NAMESPACE) --namespace $(NAMESPACE)
+	@helm uninstall saleor --namespace $(NAMESPACE)
+	@helm uninstall cert-manager --namespace $(NAMESPACE)
+	@helm uninstall nginx --namespace $(NAMESPACE)
 
 deploy: helm.setup helm.update helm.install
 	echo "Helm deployed successfully!"
 
 upgrade: helm.update
 	@helm upgrade \
-		$(NAMESPACE) saleor/saleor \
+		saleor saleor/saleor \
 		--set secretKey.name=$(SECRET_NAME) \
 		--namespace $(NAMESPACE)
 
-uninstall:
-	@helm uninstall $(NAMESPACE) --namespace $(NAMESPACE)
-
 forward.saleor:
-	$(eval SALEOR_POD_NAME := $(shell kubectl get pods --namespace $(NAMESPACE) -l "app.kubernetes.io/name=saleor,app.kubernetes.io/instance=$(NAMESPACE)" -o jsonpath="{.items[0].metadata.name}"))
+	$(eval SALEOR_POD_NAME := $(shell kubectl get pods --namespace $(NAMESPACE) -l "app.kubernetes.io/name=saleor,app.kubernetes.io/instance=saleor" -o jsonpath="{.items[0].metadata.name}"))
 	$(eval SALEOR_SERVICE_PORT?=8000)
 
 	@kubectl --namespace $(NAMESPACE) port-forward $(SALEOR_POD_NAME) $(SALEOR_SERVICE_PORT):$(SALEOR_SERVICE_PORT)
 
 forward.dashboard:
-	$(eval DASHBOARD_POD_NAME := $(shell kubectl get pods --namespace $(NAMESPACE) -l "app.kubernetes.io/name=dashboard,app.kubernetes.io/instance=$(NAMESPACE)" -o jsonpath="{.items[0].metadata.name}"))
+	$(eval DASHBOARD_POD_NAME := $(shell kubectl get pods --namespace $(NAMESPACE) -l "app.kubernetes.io/name=dashboard,app.kubernetes.io/instance=saleor" -o jsonpath="{.items[0].metadata.name}"))
 	$(eval SALEOR_DASHBOARD_SERVICE_PORT?=8080)
 
 	@kubectl --namespace $(NAMESPACE) port-forward $(DASHBOARD_POD_NAME) $(SALEOR_DASHBOARD_SERVICE_PORT):$(SALEOR_DASHBOARD_SERVICE_PORT)
 
 forward.storefront:
-	$(eval STOREFRONT_POD_NAME := $(shell kubectl get pods --namespace $(NAMESPACE) -l "app.kubernetes.io/name=storefront,app.kubernetes.io/instance=$(NAMESPACE)" -o jsonpath="{.items[0].metadata.name}"))
+	$(eval STOREFRONT_POD_NAME := $(shell kubectl get pods --namespace $(NAMESPACE) -l "app.kubernetes.io/name=storefront,app.kubernetes.io/instance=saleor" -o jsonpath="{.items[0].metadata.name}"))
 	$(eval SALEOR_STOREFRONT_SERVICE_PORT?=8080)
 
 	@kubectl --namespace $(NAMESPACE) port-forward $(STOREFRONT_POD_NAME) $(SALEOR_STOREFRONT_SERVICE_PORT):$(SALEOR_STOREFRONT_SERVICE_PORT)
@@ -141,8 +156,7 @@ chart.package:
 chart.release:
 	@cr upload --config config.yaml
 
-chart.index:
-	$(eval MESSAGE?='Index changes')
+chart.index: chart.release
 	@cr index --config config.yaml
 	@git add index.yaml charts/saleor/Chart.lock
 	@git commit -m "Update index.yaml" -- index.yaml charts/saleor/Chart.lock
@@ -154,12 +168,6 @@ events:
 	@kubectl -n $(NAMESPACE) get events --sort-by='{.lastTimestamp}'
 
 ip.create:
-	@gcloud compute addresses create storefront-$(NAMESPACE) \
-		--region $(CLUST_REG) \
-		--project $(SALEOR_PROJECT)
-	@gcloud compute addresses create dashboard-$(NAMESPACE)  \
-		--region $(CLUST_REG) \
-		--project $(SALEOR_PROJECT)
-	@gcloud compute addresses create app-$(NAMESPACE)  \
-		--region $(CLUST_REG) \
+	@gcloud compute addresses create nginx-$(NAMESPACE)-test \
+		--global \
 		--project $(SALEOR_PROJECT)
