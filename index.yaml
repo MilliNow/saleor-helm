@@ -3,6 +3,16 @@ entries:
   dashboard:
   - apiVersion: v2
     appVersion: 2.10.0
+    created: "2020-11-26T17:27:52.277223-08:00"
+    description: Dashboard for Saleor
+    digest: e0d519d08c1581a8e22fa029dee02474d2626c613a1adc0855e979a14cba679e
+    name: dashboard
+    type: application
+    urls:
+    - https://github.com/MilliNow/saleor-helm/releases/download/dashboard-0.1.22/dashboard-0.1.22.tgz
+    version: 0.1.22
+  - apiVersion: v2
+    appVersion: 2.10.0
     created: "2020-11-26T17:20:44.239327-08:00"
     description: Dashboard for Saleor
     digest: eb4dddc737bc7d5e414192ae85fc224fd6c8d43fcc1de5a8e3a21a88a09e9b06
@@ -201,6 +211,29 @@ entries:
     - https://github.com/k/saleor-helm/releases/download/dashboard-0.1.0/dashboard-0.1.0.tgz
     version: 0.1.0
   saleor:
+  - apiVersion: v2
+    appVersion: 2.10.0
+    created: "2020-11-26T17:27:52.450412-08:00"
+    dependencies:
+    - name: storefront
+      repository: file://../storefront
+      version: ^0.1.22
+    - name: dashboard
+      repository: file://../dashboard
+      version: ^0.1.22
+    - name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: ^8.10.5
+    - name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: ^10.7.1
+    description: Saleor Graphql E-commerce Helm Chart
+    digest: 77d17639b3c44cdd198f86c873fa81c39e16e9d2cb209da08de295e8bfbeab4a
+    name: saleor
+    type: application
+    urls:
+    - https://github.com/MilliNow/saleor-helm/releases/download/saleor-0.1.26/saleor-0.1.26.tgz
+    version: 0.1.26
   - apiVersion: v2
     appVersion: 2.10.0
     created: "2020-11-26T17:20:44.423208-08:00"
@@ -763,6 +796,16 @@ entries:
     - https://github.com/k/saleor-helm/releases/download/saleor-0.1.0/saleor-0.1.0.tgz
     version: 0.1.0
   storefront:
+  - apiVersion: v2
+    appVersion: 2.10.0
+    created: "2020-11-26T17:27:52.625123-08:00"
+    description: Storefont Saleor
+    digest: f280753bd6ab1198f88c7114846758877431a8757bf7af3a1a1e12430f376544
+    name: storefront
+    type: application
+    urls:
+    - https://github.com/MilliNow/saleor-helm/releases/download/storefront-0.1.22/storefront-0.1.22.tgz
+    version: 0.1.22
   - apiVersion: v2
     appVersion: 2.10.0
     created: "2020-11-26T17:20:44.590761-08:00"
