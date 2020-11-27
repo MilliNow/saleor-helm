@@ -47,8 +47,8 @@ securityContext: {}
   # runAsUser: 1000
 
 service:
-  type: LoadBalancer
-  port: 443
+  type: ClusterIP
+  port: 80
 
 # TODO: Make host dynamic
 ingress:
