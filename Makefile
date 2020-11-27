@@ -77,9 +77,6 @@ clean:
 helm.install:
 	@helm install \
 		ingress-nginx ingress-nginx/ingress-nginx \
-		--set controller.kind=DaemonSet \
-		--set controller.service.type=NodePort \
-		--set controller.hostNetwork=true \
 		--namespace $(NAMESPACE)
 
 	@helm install \

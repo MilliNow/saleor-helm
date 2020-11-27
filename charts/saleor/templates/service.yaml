@@ -14,4 +14,3 @@ spec:
   selector:
     {{- include "saleor.selectorLabels" . | nindent 4 }}
     app.kubernetes.io/component: api
-  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
