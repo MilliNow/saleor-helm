@@ -3,6 +3,16 @@ entries:
   dashboard:
   - apiVersion: v2
     appVersion: 2.10.0
+    created: "2020-11-27T03:31:46.007525-08:00"
+    description: Dashboard for Saleor
+    digest: 2a5bfa5814d59d5b1efc1da397a27c996c406770206a3dbbd5b68cf876b10654
+    name: dashboard
+    type: application
+    urls:
+    - https://github.com/MilliNow/saleor-helm/releases/download/dashboard-0.1.33/dashboard-0.1.33.tgz
+    version: 0.1.33
+  - apiVersion: v2
+    appVersion: 2.10.0
     created: "2020-11-26T23:20:43.271791-08:00"
     description: Dashboard for Saleor
     digest: e4ddcb830080d9494a372082c1daed3d69efde2a64b8c0ba564fff44283eb84a
@@ -1126,6 +1136,16 @@ entries:
     - https://github.com/k/saleor-helm/releases/download/saleor-0.1.0/saleor-0.1.0.tgz
     version: 0.1.0
   storefront:
+  - apiVersion: v2
+    appVersion: 2.10.0
+    created: "2020-11-27T03:31:46.363531-08:00"
+    description: Storefont Saleor
+    digest: ac6493ef9dcc9d2bdaa5dd26a9130bbd64b93ba4d99fafcdd2f255fdf5787778
+    name: storefront
+    type: application
+    urls:
+    - https://github.com/MilliNow/saleor-helm/releases/download/storefront-0.1.33/storefront-0.1.33.tgz
+    version: 0.1.33
   - apiVersion: v2
     appVersion: 2.10.0
     created: "2020-11-26T23:20:43.641671-08:00"
