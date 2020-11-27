@@ -44,7 +44,7 @@ service:
 ingress:
   enabled: true
   issuer:
-    name: &issuer storefront-cert-issuer-staging
+    name: &issuer storefront-cert-issuer-prod
     email: it@millinow.com
   annotations:
     kubernetes.io/ingress.class: nginx
@@ -55,7 +55,7 @@ ingress:
       paths:
         - /
   tls:
-    - secretName: letsencrypt-storefront-staging
+    - secretName: letsencrypt-storefront-prod
       hosts:
         - www.trymilli.com
 

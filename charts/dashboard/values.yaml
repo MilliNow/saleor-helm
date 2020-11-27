@@ -43,7 +43,7 @@ service:
 ingress:
   enabled: true
   issuer:
-    name: &issuer dashboard-cert-issuer-staging
+    name: &issuer dashboard-cert-issuer-prod
     email: it@millinow.com
   annotations:
     kubernetes.io/ingress.class: nginx
@@ -54,7 +54,7 @@ ingress:
       paths:
         - /dashboard
   tls:
-    - secretName: letsencrypt-dashboard-staging
+    - secretName: letsencrypt-dashboard-prod
       hosts:
         - manage.trymilli.com
 
