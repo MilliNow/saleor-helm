@@ -10,6 +10,8 @@ SECRET_NAME ?= $(NAMESPACE)-secret
 namespace:
 	@echo "Creating Kubernetes namespace: $(NAMESPACE)"
 	@kubectl create namespace $(NAMESPACE)
+	@echo "Creating Kubernetes namespace: cert-manager"
+	@kubectl create namespace cert-manager
 
 cluster.config:
 	@echo "Fetching cluster '$(CLUST)' credentials from GCloud..."
@@ -84,7 +86,7 @@ helm.install:
 
 	@helm install \
 		cert-manager jetstack/cert-manager \
-		--namespace $(NAMESPACE) \
+		--namespace cert-manager \
 		--version v1.1.0 \
 		--set installCRDs=true
 
@@ -114,7 +116,7 @@ helm.releases:
 
 helm.uninstall:
 	@helm uninstall saleor --namespace $(NAMESPACE)
-	@helm uninstall cert-manager --namespace $(NAMESPACE)
+	@helm uninstall cert-manager --namespace cert-manager
 	@helm uninstall ingress-nginx --namespace $(NAMESPACE)
 
 deploy: helm.setup helm.update helm.install
