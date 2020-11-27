@@ -1,6 +1,6 @@
 {{- if .Values.ingress.tls }}
 apiVersion: cert-manager.io/v1
-kind: ClusterIssuer
+kind: Issuer
 
 metadata:
   name: {{ .Values.ingress.issuer.name }}
