@@ -45,6 +45,9 @@ spec:
             httpGet:
               path: /
               port: http
+          env:
+            - name: API_URI
+              value: {{ .Values.global.saleorApiUrl }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

@@ -106,7 +106,7 @@ helm.releases:
 	@echo '\nRELEASES'
 	@helm list --namespace $(NAMESPACE)
 	@echo '\nHISTORY'
-	@helm history $(NAMESPACE) --namespace $(NAMESPACE)
+	@helm history saleor --namespace $(NAMESPACE)
 
 helm.uninstall:
 	@helm uninstall saleor --namespace $(NAMESPACE)
@@ -120,6 +120,7 @@ upgrade: helm.update
 	@helm upgrade \
 		saleor saleor/saleor \
 		--set secretKey.name=$(SECRET_NAME) \
+		--debug \
 		--namespace $(NAMESPACE)
 
 forward.saleor:
