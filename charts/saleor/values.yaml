@@ -5,8 +5,8 @@ global:
     postgresqlPassword: saleor
 
 defaultFromEmail: info@millinow.com
-storefrontUrl: www.trymilli.com
-dashboardUrl: manage.trymilli.com
+storefrontUrl: https://www.trymilli.com
+dashboardUrl: https://manage.trymilli.com
 
 secretKey:
   name: secret-key-name

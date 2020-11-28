@@ -1,5 +1,5 @@
 global:
-  saleorApiUrl: ""
+  saleorApiUrl: "https://app.trymilli.com/graphql/"
 
 replicaCount: 1
 
