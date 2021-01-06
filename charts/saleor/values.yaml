@@ -4,9 +4,9 @@ global:
     postgresqlUsername: postgres
     postgresqlPassword: saleor
 
-defaultFromEmail: info@millinow.com
-storefrontUrl: https://www.trymilli.com
-dashboardUrl: https://manage.trymilli.com
+defaultFromEmail: info@theoliveland.com
+storefrontUrl: https://www.theoliveland.com
+dashboardUrl: https://manage.theoliveland.com
 
 secretKey:
   name: secret-key-name
@@ -49,7 +49,7 @@ securityContext: {}
 issuer:
   staging: false
   name: &issuerName letsencrypt-saleor-prod
-  email: it@millinow.com
+  email: it@theoliveland.com
 
 service:
   enabled: true
@@ -63,7 +63,7 @@ ingress:
     kubernetes.io/ingress.class: nginx
     cert-manager.io/issuer: *issuerName
   hosts:
-    - host: &host app.trymilli.com
+    - host: &host app.theoliveland.com
       paths:
         - /
   tls:

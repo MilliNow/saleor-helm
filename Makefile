@@ -2,7 +2,7 @@
 CLUST ?= saleor-platform
 CLUST_REG ?= us-central1
 CLUST_ZONE ?= $(CLUST_REG)-a
-SALEOR_PROJECT ?= saleor-platform
+SALEOR_PROJECT ?= oliveland
 MACHINE_TYPE ?= n1-standard-2
 NAMESPACE ?= $(CLUST)-staging
 SECRET_NAME ?= $(NAMESPACE)-secret
@@ -93,7 +93,7 @@ helm.install:
 		--debug
 
 helm.setup:
-	@helm repo add saleor https://millinow.com/saleor-helm
+	@helm repo add saleor https://helm.theoliveland.com
 	@helm repo add jetstack https://charts.jetstack.io
 	@helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 	@helm repo ls
