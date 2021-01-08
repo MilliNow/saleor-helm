@@ -78,6 +78,7 @@ helm.install:
 	$(eval IP_ADDRESS := $(shell gcloud compute addresses list --project=$(SALEOR_PROJECT) --format="value(address)" --filter="name:nginx-$(NAMESPACE)"))
 	@helm install \
 		nginx ingress-nginx/ingress-nginx \
+	    --set controller.service.loadBalancerIP="$(IP_ADDRESS)" \
 		--namespace $(NAMESPACE)
 
 	@helm install \
