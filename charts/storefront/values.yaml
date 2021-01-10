@@ -36,8 +36,8 @@ securityContext: {}
   # runAsUser: 1000
 
 issuer:
-  staging: true
-  name: &issuerName letsencrypt-storefront-staging
+  staging: false
+  name: &issuerName letsencrypt-storefront-prod
   email: it@theoliveland.com
 
 service:
