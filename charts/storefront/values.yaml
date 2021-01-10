@@ -37,7 +37,7 @@ securityContext: {}
 
 issuer:
   staging: true
-  name: &issuerName letsencrypt-dashboard-staging
+  name: &issuerName letsencrypt-storefront-staging
   email: it@theoliveland.com
 
 service:

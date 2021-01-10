@@ -1,10 +1,10 @@
 dependencies:
 - name: storefront
   repository: file://../storefront
-  version: 0.1.30
+  version: 0.1.31
 - name: dashboard
   repository: file://../dashboard
-  version: 0.1.30
+  version: 0.1.31
 - name: postgresql
   repository: https://charts.bitnami.com/bitnami
   version: 8.10.14
