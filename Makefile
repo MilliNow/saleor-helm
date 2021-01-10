@@ -171,5 +171,5 @@ events:
 
 ip.create:
 	@gcloud compute addresses create nginx-$(NAMESPACE)-test \
-		--global \
+		--region $(CLUST_REG)\
 		--project $(SALEOR_PROJECT)
