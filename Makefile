@@ -4,7 +4,8 @@ CLUST_REG ?= us-central1
 CLUST_ZONE ?= $(CLUST_REG)-a
 SALEOR_PROJECT ?= oliveland
 MACHINE_TYPE ?= n1-standard-2
-NAMESPACE ?= $(CLUST)-staging
+ENV ?= prod
+NAMESPACE ?= $(CLUST)-$(ENV)
 SECRET_NAME ?= $(NAMESPACE)-secret
 
 namespace:
