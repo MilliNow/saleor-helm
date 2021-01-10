@@ -171,6 +171,6 @@ events:
 	@kubectl -n $(NAMESPACE) get events --sort-by='{.lastTimestamp}'
 
 ip.create:
-	@gcloud compute addresses create nginx-$(NAMESPACE)-test \
+	@gcloud compute addresses create nginx-$(NAMESPACE) \
 		--region $(CLUST_REG)\
 		--project $(SALEOR_PROJECT)
