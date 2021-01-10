@@ -56,7 +56,7 @@ ingress:
       paths:
         - /
   tls:
-    - secretName: *issuerName
+    - secretName: tls-dashboard
       hosts:
         - *host
 

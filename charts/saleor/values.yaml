@@ -68,7 +68,7 @@ ingress:
       paths:
         - /
   tls:
-    - secretName: *issuerName
+    - secretName: tls-saleor
       hosts:
         - *host
 
