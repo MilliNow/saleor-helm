@@ -3,6 +3,16 @@ entries:
   dashboard:
   - apiVersion: v2
     appVersion: 2.10.0
+    created: "2021-01-09T18:27:49.076596-08:00"
+    description: Dashboard for Saleor
+    digest: 71242f85a7be15fe32cf75639656b466926d4ea08d0b4b973d8b42218a82a561
+    name: dashboard
+    type: application
+    urls:
+    - https://github.com/theoliveland/saleor-helm/releases/download/dashboard-0.1.33/dashboard-0.1.33.tgz
+    version: 0.1.33
+  - apiVersion: v2
+    appVersion: 2.10.0
     created: "2021-01-09T18:11:35.455557-08:00"
     description: Dashboard for Saleor
     digest: 0d470a3ca88a8ff1bcb7f6fde90e52d4605c52a518744dc7125442165f282839
@@ -251,6 +261,29 @@ entries:
     - https://github.com/k/saleor-helm/releases/download/dashboard-0.1.0/dashboard-0.1.0.tgz
     version: 0.1.0
   saleor:
+  - apiVersion: v2
+    appVersion: 2.10.0
+    created: "2021-01-09T18:27:49.273983-08:00"
+    dependencies:
+    - name: storefront
+      repository: file://../storefront
+      version: ^0.1.33
+    - name: dashboard
+      repository: file://../dashboard
+      version: ^0.1.33
+    - name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: ^8.10.5
+    - name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: ^10.7.1
+    description: Saleor Graphql E-commerce Helm Chart
+    digest: 8a707d5ea638110a469ce4bd6022bcdbd1bf2372064c6a109ea3f9e1998e3f88
+    name: saleor
+    type: application
+    urls:
+    - https://github.com/theoliveland/saleor-helm/releases/download/saleor-0.1.33/saleor-0.1.33.tgz
+    version: 0.1.33
   - apiVersion: v2
     appVersion: 2.10.0
     created: "2021-01-09T18:11:35.652891-08:00"
@@ -859,6 +892,16 @@ entries:
     - https://github.com/k/saleor-helm/releases/download/saleor-0.1.0/saleor-0.1.0.tgz
     version: 0.1.0
   storefront:
+  - apiVersion: v2
+    appVersion: 2.10.0
+    created: "2021-01-09T18:27:49.468967-08:00"
+    description: Storefont Saleor
+    digest: 13a4b7f91173815a22e63509d452f6ef3a67dcd8097e633a638b604f37a065a0
+    name: storefront
+    type: application
+    urls:
+    - https://github.com/theoliveland/saleor-helm/releases/download/storefront-0.1.33/storefront-0.1.33.tgz
+    version: 0.1.33
   - apiVersion: v2
     appVersion: 2.10.0
     created: "2021-01-09T18:11:35.847843-08:00"
