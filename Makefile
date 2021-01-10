@@ -158,7 +158,7 @@ chart.package:
 chart.release:
 	@cr upload --config config.yaml
 
-chart.index: chart.release
+chart.index: chart.package chart.release
 	@cr index --config config.yaml
 	@git add index.yaml charts/saleor/Chart.lock
 	@git commit -m "Update index.yaml" -- index.yaml charts/saleor/Chart.lock
