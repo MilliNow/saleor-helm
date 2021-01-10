@@ -49,7 +49,6 @@ ingress:
   enabled: true
   annotations:
     kubernetes.io/ingress.class: nginx
-    kubernetes.io/tls-acme: true
     cert-manager.io/issuer: *issuerName
   hosts:
     - host: &host manage.theoliveland.com
