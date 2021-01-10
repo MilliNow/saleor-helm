@@ -104,9 +104,9 @@ helm.update:
 	@helm search repo saleor
 
 helm.releases:
-	@echo '\nRELEASES'
+	@echo -e '\nRELEASES'
 	@helm list --namespace $(NAMESPACE)
-	@echo '\nHISTORY'
+	@echo -e '\nHISTORY'
 	@helm history saleor --namespace $(NAMESPACE)
 
 helm.uninstall:
