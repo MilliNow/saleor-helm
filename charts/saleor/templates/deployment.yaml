@@ -60,6 +60,8 @@ spec:
               value: {{ template "saleor.redis" . }}/0
             - name: DEFAULT_FROM_EMAIL
               value: {{ .Values.defaultFromEmail }}
+            - name: EMAIL_URL
+              value: {{ .Values.emailUrl }}
             - name: DATABASE_URL
               value: {{ template "saleor.postgresql" . }}
             - name: SECRET_KEY
