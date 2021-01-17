@@ -5,7 +5,6 @@ global:
     postgresqlPassword: saleor
 
 defaultFromEmail: no-reply@theoliveland.com
-emailUrl: smtp://93cb224f59bd5f4d76785eb4f231aa7f:48db608d0cc1d481154d60f127b23017@in-v3.mailjet.com:587/?tls=True
 storefrontUrl: https://www.theoliveland.com
 dashboardUrl: https://manage.theoliveland.com
 
