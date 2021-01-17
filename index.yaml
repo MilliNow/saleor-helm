@@ -9,8 +9,8 @@ entries:
     name: dashboard
     type: application
     urls:
-    - https://github.com/theoliveland/saleor-helm/releases/download/dashboard-0.1.45/dashboard-0.1.45.tgz
-    version: 0.1.45
+    - https://github.com/theoliveland/saleor-helm/releases/download/dashboard-0.1.46/dashboard-0.1.46.tgz
+    version: 0.1.46
   saleor:
   - apiVersion: v2
     appVersion: 2.10.0
@@ -18,10 +18,10 @@ entries:
     dependencies:
     - name: storefront
       repository: file://../storefront
-      version: ^0.1.45
+      version: ^0.1.46
     - name: dashboard
       repository: file://../dashboard
-      version: ^0.1.45
+      version: ^0.1.46
     - name: postgresql
       repository: https://charts.bitnami.com/bitnami
       version: ^8.10.5
@@ -33,8 +33,8 @@ entries:
     name: saleor
     type: application
     urls:
-    - https://github.com/theoliveland/saleor-helm/releases/download/saleor-0.1.45/saleor-0.1.45.tgz
-    version: 0.1.45
+    - https://github.com/theoliveland/saleor-helm/releases/download/saleor-0.1.46/saleor-0.1.46.tgz
+    version: 0.1.46
   storefront:
   - apiVersion: v2
     appVersion: 2.10.0
@@ -44,6 +44,6 @@ entries:
     name: storefront
     type: application
     urls:
-    - https://github.com/theoliveland/saleor-helm/releases/download/storefront-0.1.45/storefront-0.1.45.tgz
-    version: 0.1.45
+    - https://github.com/theoliveland/saleor-helm/releases/download/storefront-0.1.46/storefront-0.1.46.tgz
+    version: 0.1.46
 generated: "2021-01-16T22:30:42.227674-08:00"

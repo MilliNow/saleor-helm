@@ -9,7 +9,9 @@ image:
   # Overrides the image tag whose default is the chart version.
   tag: "latest"
 
-imagePullSecrets: []
+imagePullSecrets:
+  - name: "image-pull-secret"
+
 nameOverride: ""
 fullnameOverride: ""
 

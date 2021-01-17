@@ -1,47 +1,16 @@
 
 CLUST ?= saleor-platform
 CLUST_REG ?= us-central1
-CLUST_ZONE ?= $(CLUST_REG)-a
+CLUST_ZONE ?= $(CLUST_REG)-c
 SALEOR_PROJECT ?= oliveland
-MACHINE_TYPE ?= n1-standard-2
-ENV ?= prod
-NAMESPACE ?= $(CLUST)-$(ENV)
-SECRET_NAME ?= $(NAMESPACE)-secret
-
-namespace:
-	@echo "Creating Kubernetes namespace: $(NAMESPACE)"
-	@kubectl create namespace $(NAMESPACE)
+NAMESPACE ?= prod
+SECRET_NAME ?= $(CLUST)-$(NAMESPACE)-secret
 
 cluster.config:
 	@echo "Fetching cluster '$(CLUST)' credentials from GCloud..."
 	@gcloud container clusters get-credentials $(CLUST) \
 		--project $(SALEOR_PROJECT)\
-		--region $(CLUST_ZONE)
-
-cluster.destroy:
-	@echo "Destroying cluster '$(CLUST)' from GCloud..."
-	@gcloud container clusters delete $(CLUST) \
-		--project $(SALEOR_PROJECT)\
-		--region $(CLUST_ZONE)
-
-secret:
-	@echo "Creating secret '$(SECRET_NAME)'..."
-	@kubectl create secret generic $(SECRET_NAME) \
-		--from-literal=secret=$(SECRET) \
-		--namespace $(NAMESPACE)
-
-cluster:
-	@echo "Creating cluster '$(CLUST)' in '$(SALEOR_PROJECT)/$(CLUST_ZONE)'"
-	@gcloud container clusters create $(CLUST) \
-		--release-channel regular \
-		--machine-type=$(MACHINE_TYPE) \
-		--region $(CLUST_ZONE) \
-		--num-nodes 1 \
-		--project $(SALEOR_PROJECT)\
-		--node-locations $(CLUST_ZONE)
-	@make namespace
-	@make cluster.config
-	@make secret
+		--region $(CLUST_REG)
 
 cluster.status:
 	@echo "\nDEPLOYMENTS"
