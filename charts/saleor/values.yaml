@@ -15,7 +15,7 @@ secretKey:
 replicaCount: 1
 
 image:
-  repository: gcr.io/oliveland/saleor
+  repository: gcr.io/oliveland-platform-100/saleor
   pullPolicy: Always
   # Overrides the image tag whose default is the chart version.
   tag: "latest"

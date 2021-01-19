@@ -2,7 +2,7 @@
 CLUST ?= saleor-platform
 CLUST_REG ?= us-central1
 CLUST_ZONE ?= $(CLUST_REG)-c
-SALEOR_PROJECT ?= oliveland
+SALEOR_PROJECT ?= oliveland-platform-100
 NAMESPACE ?= prod
 SECRET_NAME ?= $(CLUST)-$(NAMESPACE)-secret
 
