@@ -57,7 +57,7 @@ spec:
             - name: GS_STORAGE_BUCKET_NAME
               value: {{ .Values.bucketName }}
             - name: DEBUG
-              value: {{ .Values.debug }}
+              value: "{{ .Values.debug }}"
           resources:
             {{- toYaml .Values.worker.resources | nindent 12 }}
       {{- with (default .Values.worker.nodeSelector .Values.nodeSelector) }}
