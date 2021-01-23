@@ -4,7 +4,6 @@ CLUST_REG ?= us-central1
 CLUST_ZONE ?= $(CLUST_REG)-c
 SALEOR_PROJECT ?= oliveland-platform-100
 NAMESPACE ?= prod
-SECRET_NAME ?= $(CLUST)-$(NAMESPACE)-secret
 
 cluster.config:
 	@echo "Fetching cluster '$(CLUST)' credentials from GCloud..."
@@ -60,7 +59,7 @@ helm.install:
 	@helm install \
 		--namespace $(NAMESPACE) \
 		saleor saleor/saleor \
-		--set secretKey.name=$(SECRET_NAME) \
+		-f values/$(NAMESPACE).yaml \
 		--debug
 
 helm.setup:
@@ -90,7 +89,7 @@ deploy: helm.setup helm.update helm.install
 upgrade: helm.update
 	@helm upgrade \
 		saleor saleor/saleor \
-		--set secretKey.name=$(SECRET_NAME) \
+		-f values/$(NAMESPACE).yaml \
 		--debug \
 		--namespace $(NAMESPACE)
 

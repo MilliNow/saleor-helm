@@ -66,7 +66,7 @@ Create the name of the service account to use
 {{- if .Values.postgresHost -}}
 {{- .Values.postgresHost }}
 {{- else -}}
-{{- print "postgres://"  .Values.global.postgresql.postgresqlUsername ":" .Values.global.postgresql.postgresqlPassword "@" (include "saleor.fullname" .) "-postgresql" "/saleor" }}
+{{- print "postgres://"  .Values.global.postgresql.postgresqlUsername ":" .Values.global.postgresql.postgresqlPassword "@" (include "saleor.fullname" .) "-postgresql" "/" .Values.global.postgresql.postgresqlDatabase }}
 {{- end }}
 {{- end }}
 

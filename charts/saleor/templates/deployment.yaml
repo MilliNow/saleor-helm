@@ -67,6 +67,12 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.secretKey.name }}
                   key: {{ .Values.secretKey.key }}
+            - name: GS_MEDIA_BUCKET_NAME
+              value: {{ .Values.bucketName }}
+            - name: GS_STORAGE_BUCKET_NAME
+              value: {{ .Values.bucketName }}
+            - name: DEBUG
+              value: {{ .Values.debug }}
             # - name: JAEGER_AGENT_HOST
             #   value: {{ .Values.jaegerAgentHost | default $jaeger }}
           ports:
