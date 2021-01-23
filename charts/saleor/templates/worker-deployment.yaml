@@ -56,6 +56,8 @@ spec:
               value: {{ .Values.bucketName }}
             - name: GS_STORAGE_BUCKET_NAME
               value: {{ .Values.bucketName }}
+            - name: ALLOWED_CLIENT_HOSTS
+              value: {{ .Values.allowedClientHost }}
             - name: DEBUG
               value: "{{ .Values.debug }}"
           resources:

@@ -93,6 +93,12 @@ upgrade: helm.update
 		--debug \
 		--namespace $(NAMESPACE)
 
+template:
+	@helm template \
+		saleor saleor/saleor \
+		-f values/$(NAMESPACE).yaml \
+		--namespace $(NAMESPACE)
+
 forward.saleor:
 	$(eval SALEOR_POD_NAME := $(shell kubectl get pods --namespace $(NAMESPACE) -l "app.kubernetes.io/name=saleor,app.kubernetes.io/instance=saleor" -o jsonpath="{.items[0].metadata.name}"))
 	$(eval SALEOR_SERVICE_PORT?=8000)

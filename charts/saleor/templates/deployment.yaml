@@ -73,6 +73,8 @@ spec:
               value: {{ .Values.bucketName }}
             - name: DEBUG
               value: "{{ .Values.debug }}"
+            - name: ALLOWED_CLIENT_HOSTS
+              value: {{ .Values.allowedClientHost }}
             # - name: JAEGER_AGENT_HOST
             #   value: {{ .Values.jaegerAgentHost | default $jaeger }}
           ports:
