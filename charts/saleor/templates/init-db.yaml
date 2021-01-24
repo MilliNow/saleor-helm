@@ -16,7 +16,8 @@ spec:
       labels:
         {{- include "saleor.selectorLabels" . | nindent 8 }}
     spec:
-      restartPolicy: "Never"
+      restartPolicy: OnFailure
+      shareProcessNamespace: true
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
@@ -28,12 +29,10 @@ spec:
         - name: service-account
           secret:
             secretName: {{ .Values.GACRedentialsSecretName }}
-        - name: tmp-pod
-          emptyDir: {}
       containers:
-        - name: {{ .Chart.Name }}
+        - name: {{ .Chart.Name }}-migration
           securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
+            {{- toYaml .Values.migrate.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command:
@@ -41,9 +40,9 @@ spec:
             - -c
             - |
               #!/bin/bash
-              trap "touch /tmp/pod/main-terminated" EXIT
               python manage.py migrate && \
               python manage.py collectstatic --noinput;
+              sql_proxy_pid=$(pgrep cloud_sql_proxy) && kill -INT $sql_proxy_pid;
           env:
             - name: DATABASE_URL
               value: {{ template "saleor.postgresql" . }}
@@ -70,28 +69,19 @@ spec:
           volumeMounts:
             - name: service-account
               mountPath: {{ .Values.GACRedentialsDir }}
-            - name: tmp-pod
-              mountPath: /tmp/pod
           resources:
-            {{- toYaml .Values.migrateHook.resources | nindent 12 }}
+            {{- toYaml .Values.migrate.hook.resources | nindent 12 }}
         - name: cloud-sql-proxy
           image: gcr.io/cloudsql-docker/gce-proxy:1.17
-            - bash
-            - -c
-            - |
-            - /cloud_sql_proxy -instances={{ .Values.connectionName }}=tcp:{{ .Values.databasePort }} -credential_file={{ .Values.GACRedentialsPath }}
-            - & CHILD_PID=$!
-            - (while true; do if [[ -f "/tmp/pod/main-terminated" ]]; then kill $CHILD_PID; fi; sleep 1; done)
-            - & wait $CHILD_PID
-            - if [[ -f "/tmp/pod/main-terminated" ]]; then exit 0; fi
+          command:
+            - "/cloud_sql_proxy"
+            - "-instances={{ .Values.connectionName }}=tcp:{{ .Values.databasePort }}"
+            - "-credential_file={{ .Values.GACRedentialsPath }}"
           securityContext:
             runAsNonRoot: true
           volumeMounts:
           - name: service-account
             mountPath: {{ .Values.GACRedentialsDir }}
-            readOnly: true
-          - name: tmp-pod
-            mountPath: /tmp/pod
             readOnly: true
       {{- with .Values.nodeSelector }}
       nodeSelector:

@@ -118,7 +118,12 @@ worker:
     # Overrides the image tag whose default is the chart version.
     tag: "latest"
 
-migrateHook: {}
+migrate:
+  securityContext:
+    capabilities:
+      add:
+        - SYS_PTRACE
+  hook: {}
 
 redis:
   usePassword: false
