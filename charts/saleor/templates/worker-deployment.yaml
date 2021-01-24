@@ -65,16 +65,45 @@ spec:
             - name: DEBUG
               value: "{{ .Values.debug }}"
             - name: GOOGLE_APPLICATION_CREDENTIALS
-              value: "/var/run/secret/cloud.google.com/service-account.json"
+              value: {{ .Values.GACRedentialsPath }}
             - name: ENABLE_SSL
               value: "{{ .Values.enableSSL }}"
             - name: EMAIL_URL
               value: smtp://{{ .Values.MAILJET_USERNAME }}:{{ .Values.MAILJET_PASSWORD }}@{{ .Values.MAILJET_SMTP_SERVER }}:587/?tls=True
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.databaseSecret }}
+                  key: username
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.databaseSecret }}
+                  key: password
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.databaseSecret }}
+                  key: database
           volumeMounts:
             - name: service-account
-              mountPath: "/var/run/secret/cloud.google.com"
+              mountPath: {{ .Values.GACRedentialsDir }}
           resources:
             {{- toYaml .Values.worker.resources | nindent 12 }}
+        - name: cloud-sql-proxy
+          image: gcr.io/cloudsql-docker/gce-proxy:1.17
+          command:
+            - "/cloud_sql_proxy"
+            - "-instances={{ .Values.connectionName }}=tcp:{{ .Values.databasePort }}"
+            - "-credential_file={{ .Values.GACRedentialsPath }}"
+          securityContext:
+            # The default Cloud SQL proxy image runs as the
+            # "nonroot" user and group (uid: 65532) by default.
+            runAsNonRoot: true
+          volumeMounts:
+          - name: service-account
+            mountPath: {{ .Values.GACRedentialsDir }}
+            readOnly: true
       {{- with (default .Values.worker.nodeSelector .Values.nodeSelector) }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
