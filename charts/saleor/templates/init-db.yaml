@@ -80,6 +80,7 @@ spec:
             - "/cloud_sql_proxy"
             - "-instances={{ .Values.connectionName }}=tcp:{{ .Values.databasePort }}"
             - "-credential_file={{ .Values.GACRedentialsPath }}"
+            - "& CHILD_PID=$!"
           securityContext:
             runAsNonRoot: true
           volumeMounts:
