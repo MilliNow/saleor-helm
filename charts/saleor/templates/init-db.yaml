@@ -35,11 +35,9 @@ spec:
             {{- toYaml .Values.migrate.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command:
-            - bash
-            - -c
+          command: ["/bin/sh", "-c"]
+          args:
             - |
-              #!/bin/bash
               python manage.py migrate && \
               python manage.py collectstatic --noinput;
               sql_proxy_pid=$(pgrep cloud_sql_proxy) && kill -INT $sql_proxy_pid;
