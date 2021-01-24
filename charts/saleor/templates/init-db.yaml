@@ -70,21 +70,31 @@ spec:
           volumeMounts:
             - name: service-account
               mountPath: {{ .Values.GACRedentialsDir }}
-            - mountPath: /tmp/pod
-              name: tmp-pod
+            - name: tmp-pod
+              mountPath: /tmp/pod
           resources:
             {{- toYaml .Values.migrateHook.resources | nindent 12 }}
         - name: cloud-sql-proxy
           image: gcr.io/cloudsql-docker/gce-proxy:1.17
           command:
+            - bash
+            - -c
+            - |
+              #!/bin/bash
             - "/cloud_sql_proxy"
             - "-instances={{ .Values.connectionName }}=tcp:{{ .Values.databasePort }}"
-            - "-credential_file={{ .Values.GACRedentialsPath }}"
+            - "-credential_file={{ .Values.GACRedentialsPath }} & CHILD_PID=$!"
+            - "(while true; do if [[ -f \"/tmp/pod/main-terminated\" ]]; then kill $CHILD_PID; fi; sleep 1; done)"
+            - "& wait $CHILD_PID"
+            - "if [[ -f \"/tmp/pod/main-terminated\" ]]; then exit 0; fi"
           securityContext:
             runAsNonRoot: true
           volumeMounts:
           - name: service-account
             mountPath: {{ .Values.GACRedentialsDir }}
+            readOnly: true
+          - name: tmp-pod
+            mountPath: /tmp/pod
             readOnly: true
       {{- with .Values.nodeSelector }}
       nodeSelector:
