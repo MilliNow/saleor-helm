@@ -39,8 +39,10 @@ spec:
           command:
             - bash
             - -c
+          args:
             - |
               #!/bin/bash
+              trap "touch /lifecycle/main-terminated" EXIT
               python manage.py migrate && \
               python manage.py collectstatic --noinput;
           env:
@@ -69,11 +71,15 @@ spec:
           volumeMounts:
             - name: service-account
               mountPath: {{ .Values.GACRedentialsDir }}
+            - name: lifecycle
+              mountPath: /lifecycle
           resources:
             {{- toYaml .Values.migrateHook.resources | nindent 12 }}
         - name: cloud-sql-proxy
           image: gcr.io/cloudsql-docker/gce-proxy:1.17
-          command: ["/bin/sh", "-c"]
+          command:
+            - bash
+            - -c
           args:
             - |
               /cloud_sql_proxy -instances={{ .Values.connectionName }}=tcp:{{ .Values.databasePort }} -credential_file={{ .Values.GACRedentialsPath }} &
