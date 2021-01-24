@@ -113,7 +113,7 @@ worker:
     # targetMemoryUtilizationPercentage: 80
 
   image:
-    repository: kbambridge/saleor-worker
+    repository: gcr.io/oliveland-platform-100/saleor
     pullPolicy: Always
     # Overrides the image tag whose default is the chart version.
     tag: "latest"
