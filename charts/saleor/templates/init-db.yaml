@@ -28,6 +28,8 @@ spec:
         - name: service-account
           secret:
             secretName: {{ .Values.GACRedentialsSecretName }}
+        - name: tmp-pod
+          emptyDir: {}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -39,6 +41,7 @@ spec:
             - -c
             - |
               #!/bin/bash
+              trap "touch /tmp/pod/main-terminated" EXIT
               python manage.py migrate && \
               python manage.py collectstatic --noinput;
           env:
@@ -67,6 +70,8 @@ spec:
           volumeMounts:
             - name: service-account
               mountPath: {{ .Values.GACRedentialsDir }}
+            - mountPath: /tmp/pod
+              name: tmp-pod
           resources:
             {{- toYaml .Values.migrateHook.resources | nindent 12 }}
         - name: cloud-sql-proxy
