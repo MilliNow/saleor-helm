@@ -84,9 +84,6 @@ spec:
             - "/cloud_sql_proxy"
             - "-instances={{ .Values.connectionName }}=tcp:{{ .Values.databasePort }}"
             - "-credential_file={{ .Values.GACRedentialsPath }} & CHILD_PID=$!"
-            - "(while true; do if [[ -f \"/tmp/pod/main-terminated\" ]]; then kill $CHILD_PID; fi; sleep 1; done)"
-            - "& wait $CHILD_PID"
-            - "if [[ -f \"/tmp/pod/main-terminated\" ]]; then exit 0; fi"
           securityContext:
             runAsNonRoot: true
           volumeMounts:
