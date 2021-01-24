@@ -39,7 +39,7 @@ spec:
             {{- toYaml .Values.worker.securityContext | nindent 12 }}
           image: "{{ .Values.worker.image.repository }}:{{ .Values.worker.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.worker.image.pullPolicy }}
-          command: ["celery", "-A", "saleor", "worker", "--app=saleor.celeryconf:app", "--loglevel={{ .Values.worker.loglevel }}"]
+          command: ["celery", "-A", "saleor", "--app=saleor.celeryconf:app", "worker", "--loglevel={{ .Values.worker.loglevel }}"]
           env:
             - name: REDIS_URL
               value: {{ template "saleor.redis" . }}/1
