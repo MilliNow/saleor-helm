@@ -28,6 +28,8 @@ spec:
         - name: service-account
           secret:
             secretName: {{ .Values.GACRedentialsSecretName }}
+        - name: lifecycle
+          emptyDir: {}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -71,10 +73,20 @@ spec:
             {{- toYaml .Values.migrateHook.resources | nindent 12 }}
         - name: cloud-sql-proxy
           image: gcr.io/cloudsql-docker/gce-proxy:1.17
-          command:
-            - "/cloud_sql_proxy"
-            - "-instances={{ .Values.connectionName }}=tcp:{{ .Values.databasePort }}"
-            - "-credential_file={{ .Values.GACRedentialsPath }}"
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              /cloud_sql_proxy -instances={{ .Values.connectionName }}=tcp:{{ .Values.databasePort }} -credential_file={{ .Values.GACRedentialsPath }} &
+              PID=$!
+              while true
+                  do
+                      if [[ -f "/lifecycle/main-terminated" ]]
+                      then
+                          kill $PID
+                          exit 0
+                      fi
+                      sleep 1
+                  done
           securityContext:
             # The default Cloud SQL proxy image runs as the
             # "nonroot" user and group (uid: 65532) by default.
@@ -83,6 +95,8 @@ spec:
           - name: service-account
             mountPath: {{ .Values.GACRedentialsDir }}
             readOnly: true
+          - name: lifecycle
+            mountPath: /lifecycle
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
