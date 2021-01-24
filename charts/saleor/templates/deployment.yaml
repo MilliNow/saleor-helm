@@ -77,6 +77,8 @@ spec:
               value: {{ .Values.bucketName }}
             - name: DEBUG
               value: "{{ .Values.debug }}"
+            - name: ENABLE_SSL
+              value: "{{ .Values.enableSSL }}"
             - name: ALLOWED_CLIENT_HOSTS
               value: {{ .Values.allowedClientHost }}
             - name: GOOGLE_APPLICATION_CREDENTIALS

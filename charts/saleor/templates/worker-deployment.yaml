@@ -66,6 +66,10 @@ spec:
               value: "{{ .Values.debug }}"
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: "/var/run/secret/cloud.google.com/service-account.json"
+            - name: ENABLE_SSL
+              value: "{{ .Values.enableSSL }}"
+            - name: EMAIL_URL
+              value: smtp://{{ .Values.MAILJET_USERNAME }}:{{ .Values.MAILJET_PASSWORD }}@{{ .Values.MAILJET_SMTP_SERVER }}:587/?tls=True
           volumeMounts:
             - name: service-account
               mountPath: "/var/run/secret/cloud.google.com"
