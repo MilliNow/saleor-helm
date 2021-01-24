@@ -31,7 +31,7 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       volumes:
-        - name: "service-account"
+        - name: service-account
           secret:
             secretName: {{ .Values.GACRedentialsSecretName }}
       containers:
@@ -79,10 +79,12 @@ spec:
               value: "{{ .Values.debug }}"
             - name: ALLOWED_CLIENT_HOSTS
               value: {{ .Values.allowedClientHost }}
-            - name: "GOOGLE_APPLICATION_CREDENTIALS"
+            - name: GOOGLE_APPLICATION_CREDENTIALS
               value: "/var/run/secret/cloud.google.com/service-account.json"
+            - name: EMAIL_URL
+              value: smtp://{{ .Values.MAILJET_USERNAME }}:{{ .Values.MAILJET_PASSWORD }}@{{ .Values.MAILJET_SMTP_SERVER }}:587/?tls=True
           volumeMounts:
-            - name: "service-account"
+            - name: service-account
               mountPath: "/var/run/secret/cloud.google.com"
             # - name: JAEGER_AGENT_HOST
             #   value: {{ .Values.jaegerAgentHost | default $jaeger }}

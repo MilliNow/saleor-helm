@@ -30,7 +30,7 @@ spec:
       securityContext:
         {{- toYaml .Values.worker.podSecurityContext | nindent 8 }}
       volumes:
-        - name: "service-account"
+        - name: service-account
           secret:
             secretName: {{ .Values.GACRedentialsSecretName }}
       containers:
@@ -64,10 +64,10 @@ spec:
               value: {{ .Values.allowedClientHost }}
             - name: DEBUG
               value: "{{ .Values.debug }}"
-            - name: "GOOGLE_APPLICATION_CREDENTIALS"
+            - name: GOOGLE_APPLICATION_CREDENTIALS
               value: "/var/run/secret/cloud.google.com/service-account.json"
           volumeMounts:
-            - name: "service-account"
+            - name: service-account
               mountPath: "/var/run/secret/cloud.google.com"
           resources:
             {{- toYaml .Values.worker.resources | nindent 12 }}
