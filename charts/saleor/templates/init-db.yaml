@@ -77,10 +77,6 @@ spec:
         - name: cloud-sql-proxy
           image: gcr.io/cloudsql-docker/gce-proxy:1.17
           command:
-            - bash
-            - -c
-            - |
-              #!/bin/bash
             - "/cloud_sql_proxy"
             - "-instances={{ .Values.connectionName }}=tcp:{{ .Values.databasePort }}"
             - "-credential_file={{ .Values.GACRedentialsPath }}"
