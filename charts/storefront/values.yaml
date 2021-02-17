@@ -4,7 +4,7 @@ global:
 replicaCount: 1
 
 image:
-  repository: gcr.io/oliveland-platform-100/saleor-storefront
+  repository: repo/saleor-storefront
   pullPolicy: Always
   # Overrides the image tag whose default is the chart version.
   tag: "latest"

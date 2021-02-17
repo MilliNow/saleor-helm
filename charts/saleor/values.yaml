@@ -15,7 +15,7 @@ secretKey:
 replicaCount: 1
 
 image:
-  repository: gcr.io/oliveland-platform-100/saleor
+  repository: repo/saleor
   pullPolicy: Always
   # Overrides the image tag whose default is the chart version.
   tag: "latest"
@@ -113,7 +113,7 @@ worker:
     # targetMemoryUtilizationPercentage: 80
 
   image:
-    repository: gcr.io/oliveland-platform-100/saleor
+    repository: repo/saleor
     pullPolicy: Always
     # Overrides the image tag whose default is the chart version.
     tag: "latest"
