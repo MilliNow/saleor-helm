@@ -1,15 +1,15 @@
 dependencies:
 - name: storefront
   repository: file://../storefront
-  version: 0.1.76
+  version: 0.2.0
 - name: dashboard
   repository: file://../dashboard
-  version: 0.1.76
+  version: 0.2.0
 - name: postgresql
   repository: https://charts.bitnami.com/bitnami
   version: 8.10.14
 - name: redis
   repository: https://charts.bitnami.com/bitnami
   version: 10.9.0
-digest: sha256:10972f4a84ba45898c221aa11ac3e8f0318622cf4b84a864e8bf561970618787
-generated: "2021-01-24T13:18:52.371766-08:00"
+digest: sha256:a49a03e2f42711600a4fe40223ce0bbd9504402e1b669503cb1ba0e578416abf
+generated: "2021-02-22T16:42:57.279846-08:00"
