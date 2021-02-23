@@ -56,6 +56,8 @@ spec:
               value: {{ .Values.storefrontUrl }}
             - name: DASHBOARD_URL
               value: {{ .Values.dashboardUrl }}
+            - name: SENTRY_DSN
+              value: {{ .Values.sentryDSN }}
             - name: REDIS_URL
               value: {{ template "saleor.redis" . }}/1
             - name: CELERY_BROKER_URL

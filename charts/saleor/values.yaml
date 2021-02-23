@@ -4,9 +4,11 @@ global:
     postgresqlUsername: postgres
     postgresqlPassword: saleor
 
-defaultFromEmail: no-reply@theoliveland.com
+defaultFromEmail: no-reply@test.com
 storefrontUrl: https://www.theoliveland.com
 dashboardUrl: https://manage.theoliveland.com
+
+sentryDSN: ""
 
 secretKey:
   name: secret-key-name

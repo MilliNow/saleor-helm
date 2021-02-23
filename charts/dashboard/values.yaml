@@ -1,5 +1,5 @@
 global:
-  saleorApiUrl: "https://app.theoliveland.com/graphql/"
+  saleorApiUrl: "https://test.com/graphql/"
 
 replicaCount: 1
 

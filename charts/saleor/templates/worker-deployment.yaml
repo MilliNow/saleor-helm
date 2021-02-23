@@ -85,6 +85,8 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.databaseSecret }}
                   key: database
+            - name: SENTRY_DSN
+              value: {{ .Values.sentryDSN }}
           volumeMounts:
             - name: service-account
               mountPath: {{ .Values.GACRedentialsDir }}
