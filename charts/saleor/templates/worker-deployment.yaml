@@ -63,7 +63,7 @@ spec:
             - name: ALLOWED_CLIENT_HOSTS
               value: {{ .Values.allowedClientHost }}
             - name: ALLOWED_GRAPHQL_ORIGINS
-              value: {{ .Values.allowedClientHost }}
+              value: {{ .Values.allowedGraphqlOrigins }}
             - name: DEBUG
               value: "{{ .Values.debug }}"
             - name: GOOGLE_APPLICATION_CREDENTIALS

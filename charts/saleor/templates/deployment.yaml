@@ -84,7 +84,7 @@ spec:
             - name: ALLOWED_CLIENT_HOSTS
               value: {{ .Values.allowedClientHost }}
             - name: ALLOWED_GRAPHQL_ORIGINS
-              value: {{ .Values.allowedClientHost }}
+              value: {{ .Values.allowedGraphqlOrigins }}
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: {{ .Values.GACRedentialsPath }}
             - name: EMAIL_URL
