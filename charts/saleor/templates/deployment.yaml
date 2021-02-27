@@ -83,6 +83,8 @@ spec:
               value: "{{ .Values.enableSSL }}"
             - name: ALLOWED_CLIENT_HOSTS
               value: {{ .Values.allowedClientHost }}
+            - name: ALLOWED_GRAPHQL_ORIGINS
+              value: {{ .Values.allowedClientHost }}
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: {{ .Values.GACRedentialsPath }}
             - name: EMAIL_URL
