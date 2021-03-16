@@ -77,6 +77,8 @@ spec:
               value: {{ .Values.bucketName }}
             - name: GS_STORAGE_BUCKET_NAME
               value: {{ .Values.bucketName }}
+            - name: GS_DEFAULT_ACL
+              value: {{ .Values.defaultACL }}
             - name: DEBUG
               value: "{{ .Values.debug }}"
             - name: ENABLE_SSL
