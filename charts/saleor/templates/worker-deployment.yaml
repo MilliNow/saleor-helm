@@ -72,6 +72,8 @@ spec:
               value: {{ .Values.GACRedentialsPath }}
             - name: ENABLE_SSL
               value: "{{ .Values.enableSSL }}"
+            - name: VATLAYER_USE_HTTPS
+              value: "{{ .Values.vatlayerUseHttps }}"
             - name: EMAIL_URL
               value: smtp://{{ .Values.MAILJET_USERNAME }}:{{ .Values.MAILJET_PASSWORD }}@{{ .Values.MAILJET_SMTP_SERVER }}:587/?tls=True
             - name: DB_USER
