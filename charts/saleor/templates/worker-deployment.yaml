@@ -61,7 +61,7 @@ spec:
             - name: GS_BUCKET_NAME
               value: {{ .Values.bucketName }}
             - name: GS_FILE_OVERWRITE
-              value: {{ .Values.bucketFileOverwrite }}
+              value: "{{ .Values.bucketFileOverwrite }}"
             - name: GS_DEFAULT_ACL
               value: {{ .Values.defaultACL }}
             - name: ALLOWED_CLIENT_HOSTS
