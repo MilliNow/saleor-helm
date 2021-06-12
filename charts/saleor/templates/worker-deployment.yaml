@@ -58,8 +58,10 @@ spec:
                   key: {{ .Values.secretKey.key }}
             - name: GS_MEDIA_BUCKET_NAME
               value: {{ .Values.bucketName }}
-            - name: GS_STORAGE_BUCKET_NAME
+            - name: GS_BUCKET_NAME
               value: {{ .Values.bucketName }}
+            - name: GS_FILE_OVERWRITE
+              value: {{ .Values.bucketFileOverwrite }}
             - name: GS_DEFAULT_ACL
               value: {{ .Values.defaultACL }}
             - name: ALLOWED_CLIENT_HOSTS
