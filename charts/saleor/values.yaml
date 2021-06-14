@@ -1,5 +1,6 @@
 global:
   postgresql:
+    enabled: true  # Flag to enable/disable postgres subchart
     postgresqlDatabase: saleor
     postgresqlUsername: postgres
     postgresqlPassword: saleor
