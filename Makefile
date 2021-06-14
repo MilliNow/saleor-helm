@@ -86,6 +86,9 @@ helm.uninstall:
 deploy: helm.setup helm.update helm.install
 	echo "Helm deployed successfully!"
 
+hpa:
+	kubectl get hpa --namespace $(NAMESPACE)
+
 upgrade: helm.update
 	@helm upgrade \
 		saleor saleor/saleor \
