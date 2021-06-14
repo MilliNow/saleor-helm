@@ -1,95 +1,101 @@
-apiVersion: batch/v1
-kind: Job
-metadata:
-  name: {{ include "saleor.fullname" . }}-migrate
-  labels:
-    {{- include "saleor.labels" . | nindent 4 }}
-  annotations:
-    helm.sh/hook: pre-upgrade,post-install
-spec:
-  template:
-    metadata:
-    {{- with .Values.podAnnotations }}
-      annotations:
-        {{- toYaml . | nindent 8 }}
-    {{- end }}
-      labels:
-        {{- include "saleor.selectorLabels" . | nindent 8 }}
-    spec:
-      restartPolicy: OnFailure
-      shareProcessNamespace: true
-      {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
+{{/*
+Don't create a postgres pod if we are using external DB
+*/}}
+
+{{- if not .Values.postgresHost -}}
+  apiVersion: batch/v1
+  kind: Job
+  metadata:
+    name: {{ include "saleor.fullname" . }}-migrate
+    labels:
+      {{- include "saleor.labels" . | nindent 4 }}
+    annotations:
+      helm.sh/hook: pre-upgrade,post-install
+  spec:
+    template:
+      metadata:
+      {{- with .Values.podAnnotations }}
+        annotations:
+          {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "saleor.serviceAccountName" . }}
-      securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
-      volumes:
-        - name: service-account
-          secret:
-            secretName: {{ .Values.GACRedentialsSecretName }}
-      containers:
-        - name: {{ .Chart.Name }}-migration
-          securityContext:
-            {{- toYaml .Values.migrate.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: ["/bin/sh", "-c"]
-          args:
-            - |
-              python manage.py migrate && \
-              python manage.py collectstatic --noinput;
-              sql_proxy_pid=$(pgrep cloud_sql_proxy) && kill -INT $sql_proxy_pid;
-          env:
-            - name: DATABASE_URL
-              value: {{ template "saleor.postgresql" . }}
-            - name: SECRET_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.secretKey.name }}
-                  key: {{ .Values.secretKey.key }}
-            - name: DB_USER
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.databaseSecret }}
-                  key: username
-            - name: DB_PASS
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.databaseSecret }}
-                  key: password
-            - name: DB_NAME
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.databaseSecret }}
-                  key: database
-          volumeMounts:
+        labels:
+          {{- include "saleor.selectorLabels" . | nindent 8 }}
+      spec:
+        restartPolicy: OnFailure
+        shareProcessNamespace: true
+        {{- with .Values.imagePullSecrets }}
+        imagePullSecrets:
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+        serviceAccountName: {{ include "saleor.serviceAccountName" . }}
+        securityContext:
+          {{- toYaml .Values.podSecurityContext | nindent 8 }}
+        volumes:
+          - name: service-account
+            secret:
+              secretName: {{ .Values.GACRedentialsSecretName }}
+        containers:
+          - name: {{ .Chart.Name }}-migration
+            securityContext:
+              {{- toYaml .Values.migrate.securityContext | nindent 12 }}
+            image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+            imagePullPolicy: {{ .Values.image.pullPolicy }}
+            command: ["/bin/sh", "-c"]
+            args:
+              - |
+                python manage.py migrate && \
+                python manage.py collectstatic --noinput;
+                sql_proxy_pid=$(pgrep cloud_sql_proxy) && kill -INT $sql_proxy_pid;
+            env:
+              - name: DATABASE_URL
+                value: {{ template "saleor.postgresql" . }}
+              - name: SECRET_KEY
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ .Values.secretKey.name }}
+                    key: {{ .Values.secretKey.key }}
+              - name: DB_USER
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ .Values.databaseSecret }}
+                    key: username
+              - name: DB_PASS
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ .Values.databaseSecret }}
+                    key: password
+              - name: DB_NAME
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ .Values.databaseSecret }}
+                    key: database
+            volumeMounts:
+              - name: service-account
+                mountPath: {{ .Values.GACRedentialsDir }}
+            resources:
+              {{- toYaml .Values.migrate.hook.resources | nindent 12 }}
+          - name: cloud-sql-proxy
+            image: gcr.io/cloudsql-docker/gce-proxy:1.17
+            command:
+              - "/cloud_sql_proxy"
+              - "-instances={{ .Values.connectionName }}=tcp:{{ .Values.databasePort }}"
+              - "-credential_file={{ .Values.GACRedentialsPath }}"
+            securityContext:
+              runAsNonRoot: true
+            volumeMounts:
             - name: service-account
               mountPath: {{ .Values.GACRedentialsDir }}
-          resources:
-            {{- toYaml .Values.migrate.hook.resources | nindent 12 }}
-        - name: cloud-sql-proxy
-          image: gcr.io/cloudsql-docker/gce-proxy:1.17
-          command:
-            - "/cloud_sql_proxy"
-            - "-instances={{ .Values.connectionName }}=tcp:{{ .Values.databasePort }}"
-            - "-credential_file={{ .Values.GACRedentialsPath }}"
-          securityContext:
-            runAsNonRoot: true
-          volumeMounts:
-          - name: service-account
-            mountPath: {{ .Values.GACRedentialsDir }}
-            readOnly: true
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+              readOnly: true
+        {{- with .Values.nodeSelector }}
+        nodeSelector:
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- with .Values.affinity }}
+        affinity:
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- with .Values.tolerations }}
+        tolerations:
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+{{- end }}
