@@ -3,6 +3,26 @@ entries:
   dashboard:
   - apiVersion: v2
     appVersion: 0.4.0
+    created: "2021-06-13T20:34:10.074931-07:00"
+    description: Dashboard for Saleor
+    digest: 2a580e10d80338909c7e137b83c7f8cd8eed68588f460d371ffdd4e5a874ef25
+    name: dashboard
+    type: application
+    urls:
+    - https://github.com/theoliveland/saleor-helm/releases/download/dashboard-0.2.10/dashboard-0.2.10.tgz
+    version: 0.2.10
+  - apiVersion: v2
+    appVersion: 0.4.0
+    created: "2021-06-13T20:05:29.103577-07:00"
+    description: Dashboard for Saleor
+    digest: 99cca4f65af222e9d9e6f7322662d4f9289fdb193e567970cca5b84486c72c74
+    name: dashboard
+    type: application
+    urls:
+    - https://github.com/theoliveland/saleor-helm/releases/download/dashboard-0.2.9/dashboard-0.2.9.tgz
+    version: 0.2.9
+  - apiVersion: v2
+    appVersion: 0.4.0
     created: "2021-06-12T02:49:20.638956-07:00"
     description: Dashboard for Saleor
     digest: ffa0952ef4b5eafac4c1f4c2c44b1306dd4d12753694937b2c6fec47f5b1d7f0
@@ -392,6 +412,53 @@ entries:
     - https://github.com/theoliveland/saleor-helm/releases/download/dashboard-0.1.46/dashboard-0.1.46.tgz
     version: 0.1.46
   saleor:
+  - apiVersion: v2
+    appVersion: 0.4.0
+    created: "2021-06-13T20:34:10.267149-07:00"
+    dependencies:
+    - name: storefront
+      repository: file://../storefront
+      version: ^0.2.10
+    - name: dashboard
+      repository: file://../dashboard
+      version: ^0.2.10
+    - condition: global.postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: ^8.10.5
+    - name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: ^10.7.1
+    description: Saleor Graphql E-commerce Helm Chart
+    digest: 4dabc1bd0ae562cdab13171310eefc72595ab2a71e926fe2c3e9082d6be73fda
+    name: saleor
+    type: application
+    urls:
+    - https://github.com/theoliveland/saleor-helm/releases/download/saleor-0.2.10/saleor-0.2.10.tgz
+    version: 0.2.10
+  - apiVersion: v2
+    appVersion: 0.4.0
+    created: "2021-06-13T20:05:29.424207-07:00"
+    dependencies:
+    - name: storefront
+      repository: file://../storefront
+      version: ^0.2.9
+    - name: dashboard
+      repository: file://../dashboard
+      version: ^0.2.9
+    - name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: ^8.10.5
+    - name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: ^10.7.1
+    description: Saleor Graphql E-commerce Helm Chart
+    digest: 04d2d40aac3ad4518232fd8d158d495193538a28989dde94c2481dedda157d1b
+    name: saleor
+    type: application
+    urls:
+    - https://github.com/theoliveland/saleor-helm/releases/download/saleor-0.2.9/saleor-0.2.9.tgz
+    version: 0.2.9
   - apiVersion: v2
     appVersion: 0.4.0
     created: "2021-06-12T02:49:20.827879-07:00"
@@ -1290,6 +1357,26 @@ entries:
     - https://github.com/theoliveland/saleor-helm/releases/download/saleor-0.1.46/saleor-0.1.46.tgz
     version: 0.1.46
   storefront:
+  - apiVersion: v2
+    appVersion: 0.4.0
+    created: "2021-06-13T20:34:10.508019-07:00"
+    description: Storefont Saleor
+    digest: 3146d88c73289c48b418ac0e917184007aa8bb8286f66ebee7903b63d285a2ac
+    name: storefront
+    type: application
+    urls:
+    - https://github.com/theoliveland/saleor-helm/releases/download/storefront-0.2.10/storefront-0.2.10.tgz
+    version: 0.2.10
+  - apiVersion: v2
+    appVersion: 0.4.0
+    created: "2021-06-13T20:05:29.604984-07:00"
+    description: Storefont Saleor
+    digest: f7e77e92d7287473bb4ef0cc51570d6153a3f48d817257ea72eda9b10b0905cc
+    name: storefront
+    type: application
+    urls:
+    - https://github.com/theoliveland/saleor-helm/releases/download/storefront-0.2.9/storefront-0.2.9.tgz
+    version: 0.2.9
   - apiVersion: v2
     appVersion: 0.4.0
     created: "2021-06-12T02:49:21.022406-07:00"
