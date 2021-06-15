@@ -37,8 +37,8 @@ the following:
 |      Service      | Port |
 |:------------------|:----:|
 | saleor            | 8000 |
-| Saleor-dashboard  | 80 |
-| Saleor-storefront | 80 |
+| Saleor-dashboard  | 8080 |
+| Saleor-storefront | 8080 |
 
 ### Using bash
 Bash is extremely helpful in running management commands on your services. To 

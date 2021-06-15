@@ -110,13 +110,13 @@ forward.saleor:
 
 forward.dashboard:
 	$(eval DASHBOARD_POD_NAME := $(shell kubectl get pods --namespace $(NAMESPACE) -l "app.kubernetes.io/name=dashboard,app.kubernetes.io/instance=saleor" -o jsonpath="{.items[0].metadata.name}"))
-	$(eval SALEOR_DASHBOARD_SERVICE_PORT?=80)
+	$(eval SALEOR_DASHBOARD_SERVICE_PORT?=8080)
 
 	@kubectl --namespace $(NAMESPACE) port-forward $(DASHBOARD_POD_NAME) $(SALEOR_DASHBOARD_SERVICE_PORT):$(SALEOR_DASHBOARD_SERVICE_PORT)
 
 forward.storefront:
 	$(eval STOREFRONT_POD_NAME := $(shell kubectl get pods --namespace $(NAMESPACE) -l "app.kubernetes.io/name=storefront,app.kubernetes.io/instance=saleor" -o jsonpath="{.items[0].metadata.name}"))
-	$(eval SALEOR_STOREFRONT_SERVICE_PORT?=80)
+	$(eval SALEOR_STOREFRONT_SERVICE_PORT?=8080)
 
 	@kubectl --namespace $(NAMESPACE) port-forward $(STOREFRONT_POD_NAME) $(SALEOR_STOREFRONT_SERVICE_PORT):$(SALEOR_STOREFRONT_SERVICE_PORT)
 
