@@ -1,37 +1,6 @@
 
-CLUST ?= saleor-platform
-CLUST_REG ?= us-central1
-CLUST_ZONE ?= $(CLUST_REG)-c
 SALEOR_PROJECT ?= oliveland-platform-100
 NAMESPACE ?= prod
-
-cluster.config:
-	@echo "Fetching cluster '$(CLUST)' credentials from GCloud..."
-	@gcloud container clusters get-credentials $(CLUST) \
-		--project $(SALEOR_PROJECT)\
-		--region $(CLUST_REG)
-
-cluster.status:
-	@echo "\nDEPLOYMENTS"
-	@kubectl get deployments --namespace $(NAMESPACE)
-
-	@echo "\nREPLICA SETS"
-	@kubectl get replicasets --namespace $(NAMESPACE)
-
-	@echo "\nPODS"
-	@kubectl get pods --namespace $(NAMESPACE)
-
-	@echo "\nSERVICES"
-	@kubectl get svc --namespace $(NAMESPACE)
-
-	@echo "\nINGRESS"
-	@kubectl get ingress --namespace $(NAMESPACE)
-
-	@echo "\nIP ADDRESSES"
-	@gcloud compute addresses list --project $(SALEOR_PROJECT)
-
-	@echo "\nCertificates"
-	@kubectl get certificate --namespace $(NAMESPACE)
 
 clean:
 	@rm -rf ~/Library/Caches/helm
@@ -43,7 +12,7 @@ clean:
 
 	@rm -rf ~/.cache/helm/
 
-helm.install:
+install:
 	$(eval IP_ADDRESS := $(shell gcloud compute addresses list --project=$(SALEOR_PROJECT) --format="value(address)" --filter="name:nginx-$(NAMESPACE)"))
 	@helm install \
 		nginx ingress-nginx/ingress-nginx \
@@ -62,34 +31,28 @@ helm.install:
 		-f values/$(NAMESPACE).yaml \
 		--debug
 
-helm.setup:
+setup:
 	@helm repo add saleor https://helm.theoliveland.com
 	@helm repo add jetstack https://charts.jetstack.io
 	@helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 	@helm repo ls
 
-helm.update:
+update:
 	@helm repo update
 	@helm search repo saleor
 
-helm.releases:
+releases:
 	@echo -e '\nRELEASES'
 	@helm list --namespace $(NAMESPACE)
 	@echo -e '\nHISTORY'
 	@helm history saleor --namespace $(NAMESPACE)
 
-helm.uninstall:
+uninstall:
 	@helm uninstall saleor --namespace $(NAMESPACE)
 	@helm uninstall cert-manager --namespace $(NAMESPACE)
 	@helm uninstall nginx --namespace $(NAMESPACE)
 
-deploy: helm.setup helm.update helm.install
-	echo "Helm deployed successfully!"
-
-hpa:
-	kubectl get hpa --namespace $(NAMESPACE)
-
-upgrade: helm.update
+upgrade:
 	@helm upgrade \
 		saleor saleor/saleor \
 		-f values/$(NAMESPACE).yaml \
@@ -110,13 +73,13 @@ forward.saleor:
 
 forward.dashboard:
 	$(eval DASHBOARD_POD_NAME := $(shell kubectl get pods --namespace $(NAMESPACE) -l "app.kubernetes.io/name=dashboard,app.kubernetes.io/instance=saleor" -o jsonpath="{.items[0].metadata.name}"))
-	$(eval SALEOR_DASHBOARD_SERVICE_PORT?=8080)
+	$(eval SALEOR_DASHBOARD_SERVICE_PORT?=80)
 
 	@kubectl --namespace $(NAMESPACE) port-forward $(DASHBOARD_POD_NAME) $(SALEOR_DASHBOARD_SERVICE_PORT):$(SALEOR_DASHBOARD_SERVICE_PORT)
 
 forward.storefront:
 	$(eval STOREFRONT_POD_NAME := $(shell kubectl get pods --namespace $(NAMESPACE) -l "app.kubernetes.io/name=storefront,app.kubernetes.io/instance=saleor" -o jsonpath="{.items[0].metadata.name}"))
-	$(eval SALEOR_STOREFRONT_SERVICE_PORT?=8080)
+	$(eval SALEOR_STOREFRONT_SERVICE_PORT?=80)
 
 	@kubectl --namespace $(NAMESPACE) port-forward $(STOREFRONT_POD_NAME) $(SALEOR_STOREFRONT_SERVICE_PORT):$(SALEOR_STOREFRONT_SERVICE_PORT)
 
@@ -143,11 +106,3 @@ chart.index: chart.package chart.release
 	@git push
 	@git add .
 	@echo "Commit and push changes"
-
-events:
-	@kubectl -n $(NAMESPACE) get events --sort-by='{.lastTimestamp}'
-
-ip.create:
-	@gcloud compute addresses create nginx-$(NAMESPACE) \
-		--region $(CLUST_REG)\
-		--project $(SALEOR_PROJECT)
