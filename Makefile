@@ -83,9 +83,6 @@ forward.storefront:
 
 	@kubectl --namespace $(NAMESPACE) port-forward $(STOREFRONT_POD_NAME) $(SALEOR_STOREFRONT_SERVICE_PORT):$(SALEOR_STOREFRONT_SERVICE_PORT)
 
-bash:
-	@kubectl exec --stdin --tty $(POD_NAME) --namespace $(NAMESPACE) -- /bin/sh
-
 chart.package:
 	@echo "Make sure to update the chart version in the repo"
 	@rm -rf .deploy
